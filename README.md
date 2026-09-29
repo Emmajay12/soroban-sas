@@ -160,6 +160,32 @@ Detailed usage and flags for every subcommand are available via:
 cargo run -p soroban-sas-cli -- --help
 ```
 
+## TOML Configuration File
+
+The CLI can read default RPC and network settings from a TOML configuration file.
+This avoids repeating `--rpc-url` and `--network-passphrase` on every invocation.
+
+The config file is discovered in this order:
+
+1. `$SOROBAN_SAS_CONFIG` environment variable (explicit path).
+2. `./soroban-sas.toml` in the current working directory.
+3. `$HOME/.config/soroban-sas/config.toml`.
+
+Example `soroban-sas.toml`:
+
+```toml
+default_network = "testnet"
+rpc_url = "https://soroban-testnet.stellar.org"
+network_passphrase = "Test SDF Network ; September 2015"
+```
+
+Precedence (explicit flag > environment variable > TOML default > built-in network name):
+
+1. An explicit subcommand flag (`--rpc-url`, `--network-passphrase`, `--network`).
+2. The matching environment variable (`SOROBAN_RPC_URL`, `SOROBAN_NETWORK_PASSPHRASE`).
+3. TOML configuration file defaults.
+4. Built-in network name resolution (`testnet`, `futurenet`, `mainnet`, `local`).
+
 ## Delegated Issuance
 
 Delegated issuance and revocation let an attester sign an operation off-chain
