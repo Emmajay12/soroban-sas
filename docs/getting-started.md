@@ -344,8 +344,8 @@ cargo run -p soroban-sas-cli -- attest verify --uid "$ATTESTATION_UID" \
 ```
 
 Run `soroban-sas-cli config show` to print the effective configuration and
-which file it came from. See the [CLI README configuration
-section](../packages/soroban-sas-cli/README.md#configuration) for the full schema
+which file it came from. See the [TOML Configuration File
+section](../README.md#toml-configuration-file) for the full schema
 and all keys.
 
 ## Next steps

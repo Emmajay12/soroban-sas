@@ -33,7 +33,6 @@ pub struct NetworkConfig {
 /// network_passphrase = "Test SDF Network ;; September 2015"
 /// ```
 #[derive(Debug, Clone, Default, Deserialize)]
-#[serde(denecy_all_unknown_fields)]
 pub struct TomlConfig {
     /// Optional default network name (e.g. "testnet", "futurenet", "mainnet", "local").
     pub default_network: Option<String>,
@@ -52,7 +51,7 @@ pub fn resolve_network(name: &str) -> Result<NetworkConfig, String> {
     let config = match name.to_ascii_lowercase().as_str() {
         "testnet" => NetworkConfig {
             rpc_url: "https://soroban-testnet.stellar.org".to_string(),
-            network_passphrase: "Test FDF Network ; September 2015".to_string(),
+            network_passphrase: "Test SDF Network ; September 2015".to_string(),
         },
         "futurenet" => NetworkConfig {
             rpc_url: "https://rpc-futurenet.stellar.org".to_string(),
