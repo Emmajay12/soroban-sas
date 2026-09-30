@@ -1,4 +1,3 @@
-
 #[cfg(test)]
 mod tests {
     use clap::Parser;
@@ -9,7 +8,6 @@ mod tests {
         validate_fee_amount, validate_schema_syntax, AttestCommands, Cli, Commands, OutputFormat,
         SasCommands, SchemaCommands,
     };
-
 
     #[test]
     fn test_cli_snapshot_formatting() {
@@ -152,7 +150,6 @@ mod tests {
         assert_eq!(cli.network.as_deref(), Some("testnet"));
     }
 
-
     #[test]
     fn output_flag_parses_and_defaults_to_human() {
         let default = Cli::try_parse_from(["soroban-sas"]).unwrap();
@@ -188,7 +185,6 @@ mod tests {
         };
         assert_eq!(parsed_uid, uid);
     }
-
 
     #[test]
     fn rejects_uid_that_is_not_32_bytes() {
@@ -248,7 +244,6 @@ mod tests {
         assert_eq!(data, "deadbeef");
         assert_eq!(expiration, 0);
     }
-
 
     #[test]
     fn parses_attest_bulk_flags_with_safe_defaults() {
@@ -335,7 +330,6 @@ mod tests {
         assert!(decode_hex_or_base64("not valid at all!!").is_err());
     }
 
-
     #[test]
     fn verify_clap_cli_structure() {
         use clap::CommandFactory;
@@ -400,7 +394,6 @@ mod tests {
         assert_eq!(address, recipient);
     }
 
-
     #[test]
     fn parses_sas_get_fee_flags() {
         let cli = Cli::try_parse_from([
@@ -436,7 +429,6 @@ mod tests {
             Some("https://soroban-testnet.stellar.org")
         );
     }
-
 
     #[test]
     fn parses_sas_set_fee_flags_and_globals() {
@@ -489,7 +481,6 @@ mod tests {
         );
     }
 
-
     #[test]
     fn parses_sas_clear_fee_flags_and_mainnet_network_defaults() {
         let cli = Cli::try_parse_from([
@@ -529,7 +520,6 @@ mod tests {
             "https://mainnet.sorobanrpc.com"
         );
     }
-
 
     #[test]
     fn sas_fee_admin_commands_use_global_identity_resolution() {
@@ -571,7 +561,6 @@ mod tests {
         assert!(clear_error.contains("invalid --identity"));
     }
 
-
     #[test]
     fn sas_set_fee_rejects_non_positive_amounts_before_rpc_setup() {
         assert_eq!(
@@ -605,7 +594,6 @@ mod tests {
             assert_eq!(error, "--amount must be greater than 0");
         }
     }
-
 
     #[test]
     fn parses_schema_withdraw_fees_flags() {
@@ -659,7 +647,6 @@ mod tests {
         );
     }
 
-
     #[test]
     fn schema_withdraw_fees_rejects_non_positive_amounts_before_rpc_setup() {
         let contract_id = "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABSC4";
@@ -684,7 +671,6 @@ mod tests {
         }
     }
 
-
     #[test]
     fn sas_fee_admin_success_formatters_match_required_output() {
         let result = soroban_sas_sdk::rpc::GetTransactionResult {
@@ -702,7 +688,6 @@ mod tests {
         assert!(human.contains("abc123"));
     }
 
-
     #[test]
     fn sas_admin_unauthorized_error_is_explicit() {
         let message =
@@ -715,7 +700,6 @@ mod tests {
             crate::format_sas_admin_error(soroban_sas_sdk::errors::SdkError::ContractError(302));
         assert!(!other.contains("Unauthorized"));
     }
-
 
     #[test]
     fn sas_get_fee_works_without_identity_and_resolves_network() {
@@ -752,14 +736,12 @@ mod tests {
         );
     }
 
-
     #[test]
     fn test_fee_formatting_fee_free() {
         let fee: Option<(soroban_sdk::Address, i128)> = None;
         assert_eq!(fee_to_human(&fee), "Fee: free");
         assert_eq!(fee_to_json(&fee), serde_json::Value::Null);
     }
-
 
     #[test]
     fn test_fee_formatting_fee_configured() {
@@ -781,7 +763,6 @@ mod tests {
         );
     }
 }
-
 
 #[cfg(test)]
 mod offchain_tests {
@@ -814,7 +795,6 @@ mod offchain_tests {
         }
     }
 
-
     #[test]
     fn test_payload_hash_deterministic() {
         let input = sample_input([41u8; 32]);
@@ -832,7 +812,6 @@ mod offchain_tests {
         assert_ne!(h1, h5);
     }
 
-
     #[test]
     fn test_sign_and_verify_roundtrip() {
         let seed = [41u8; 32];
@@ -840,7 +819,6 @@ mod offchain_tests {
         let signed = sign_offchain_attestation(input, 7, NETWORK, &contract_id(), &seed).unwrap();
         assert!(verify_offchain_attestation(&signed).is_ok());
     }
-
 
     #[test]
     fn test_verify_rejects_tampered_data() {
@@ -851,7 +829,6 @@ mod offchain_tests {
         signed.attestation.data = "deadbeee".to_string();
         assert!(verify_offchain_attestation(&signed).is_err());
     }
-
 
     #[test]
     fn test_verify_rejects_wrong_key() {
@@ -868,7 +845,6 @@ mod offchain_tests {
         assert!(verify_offchain_attestation(&signed).is_err());
     }
 
-
     #[test]
     fn test_verify_rejects_nonce_change() {
         let seed = [41u8; 32];
@@ -879,7 +855,6 @@ mod offchain_tests {
         assert!(verify_offchain_attestation(&signed).is_err());
     }
 
-
     #[test]
     fn test_sign_rejects_mismatched_attester() {
         let seed = [41u8; 32];
@@ -887,7 +862,6 @@ mod offchain_tests {
         let input = sample_input([43u8; 32]);
         assert!(sign_offchain_attestation(input, 7, NETWORK, &contract_id(), &seed).is_err());
     }
-
 
     #[test]
     fn test_parse_secret_seed_hex_and_strkey() {
@@ -897,7 +871,6 @@ mod offchain_tests {
         assert_eq!(parse_secret_seed(&strkey).unwrap(), seed);
         assert!(parse_secret_seed("not a key").is_err());
     }
-
 
     // --- Issue #171: malformed address strings return a validation error
     // instead of trapping the host inside `Address::from_string`. ---
@@ -919,7 +892,6 @@ mod offchain_tests {
         assert!(err.contains("attester"));
     }
 
-
     #[test]
     fn compute_payload_hash_rejects_a_malformed_contract_id_without_panicking() {
         let input = sample_input([41u8; 32]);
@@ -927,7 +899,6 @@ mod offchain_tests {
             .expect_err("malformed contract_id must be rejected");
         assert!(err.contains("contract_id"));
     }
-
 
     #[test]
     fn offline_verify_never_makes_online_status_claims() {
@@ -939,7 +910,6 @@ mod offchain_tests {
         let signed = sign_offchain_attestation(input, 7, NETWORK, &contract_id(), &seed).unwrap();
         assert!(verify_offchain_attestation(&signed).is_ok());
     }
-
 
     #[test]
     fn test_generate_uid_is_deterministic_for_the_same_inputs() {
@@ -957,7 +927,6 @@ mod offchain_tests {
         let uid3 = generate_uid(&env, &schema_uid, &recipient, &attester, b"cafebabe").unwrap();
         assert_ne!(uid1, uid3);
     }
-
 
     // --- Issue #304: a missing recipient is a local input error on every
     // on-chain issuance path, reported with the contract's own error. ---
@@ -977,7 +946,6 @@ mod offchain_tests {
             Ok(())
         );
     }
-
 
     #[test]
     fn onchain_parties_reject_no_recipient_sentinels_with_invalid_recipient() {
@@ -1001,7 +969,6 @@ mod offchain_tests {
         }
     }
 
-
     #[test]
     fn onchain_parties_reject_self_attestation_distinctly() {
         let env = soroban_sdk::Env::default();
@@ -1012,7 +979,6 @@ mod offchain_tests {
         assert!(err.contains("must differ from the attester"), "{err}");
         assert!(err.contains("InvalidRecipient"), "{err}");
     }
-
 
     #[test]
     fn onchain_recipient_check_reports_malformed_input_as_a_parse_error() {
@@ -1026,7 +992,6 @@ mod offchain_tests {
         assert!(!err.contains("InvalidRecipient"), "{err}");
     }
 
-
     #[test]
     fn offchain_signing_still_accepts_a_recipientless_attestation() {
         // Regression guard: off-chain verification places no constraint on
@@ -1038,7 +1003,6 @@ mod offchain_tests {
         assert!(verify_offchain_attestation(&signed).is_ok());
     }
 }
-
 
 /// Issue #175: `--online` must query only the caller-supplied trusted
 /// contract/network — never the file's own embedded values — and must
@@ -1123,7 +1087,6 @@ mod online_verification_tests {
         )
     }
 
-
     #[test]
     fn a_contract_mismatch_is_reported_and_the_trusted_contract_is_what_gets_queried() {
         let embedded_contract = stellar_strkey::Contract([1u8; 32]).to_string();
@@ -1145,7 +1108,6 @@ mod online_verification_tests {
         assert!(!report.on_chain_found);
         assert!(!report.overall_valid);
     }
-
 
     #[test]
     fn a_network_mismatch_is_reported_independently_of_contract_and_on_chain_status() {
@@ -1169,7 +1131,6 @@ mod online_verification_tests {
         assert!(!report.overall_valid);
     }
 
-
     #[test]
     fn schema_registry_omission_reports_not_checked_rather_than_failing_closed_or_open() {
         let contract = stellar_strkey::Contract([4u8; 32]).to_string();
@@ -1183,7 +1144,6 @@ mod online_verification_tests {
         assert_eq!(report.schema_status, "not_checked");
     }
 
-
     fn fee_none_response() -> String {
         let env = soroban_sdk::Env::default();
         let none_fee: Option<(soroban_sdk::Address, i128)> = None;
@@ -1195,7 +1155,6 @@ mod online_verification_tests {
             r#"{{"jsonrpc":"2.0","id":1,"result":{{"latestLedger":100,"results":[{{"xdr":"{result_xdr}"}}]}}}}"#
         )
     }
-
 
     fn fee_configured_response(
         env: &soroban_sdk::Env,
@@ -1211,7 +1170,6 @@ mod online_verification_tests {
             r#"{{"jsonrpc":"2.0","id":1,"result":{{"latestLedger":100,"results":[{{"xdr":"{result_xdr}"}}]}}}}"#
         )
     }
-
 
     #[test]
     fn sas_get_fee_simulation_free() {
@@ -1230,7 +1188,6 @@ mod online_verification_tests {
         );
         assert!(res.is_ok());
     }
-
 
     #[test]
     fn sas_get_fee_simulation_configured() {
@@ -1257,7 +1214,6 @@ mod online_verification_tests {
     }
 }
 
-
 #[cfg(test)]
 mod by_attester_query_tests {
     use clap::{CommandFactory, Parser};
@@ -1272,7 +1228,6 @@ mod by_attester_query_tests {
 
     const ATTESTER: &str = "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF";
     const CONTRACT: &str = "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABSC4";
-
 
     #[test]
     fn parses_query_by_attester_flags() {
@@ -1311,7 +1266,6 @@ mod by_attester_query_tests {
         );
     }
 
-
     #[test]
     fn by_attester_help_documents_the_command_and_flags() {
         let mut root = Cli::command();
@@ -1328,7 +1282,6 @@ mod by_attester_query_tests {
         assert!(help.contains("--rpc-url"));
         assert!(help.contains("Soroban RPC endpoint URL"));
     }
-
 
     #[test]
     fn network_shorthand_parses_without_an_explicit_rpc_url() {
@@ -1358,7 +1311,6 @@ mod by_attester_query_tests {
         );
     }
 
-
     #[test]
     fn formatter_produces_required_human_and_json_shapes() {
         let env = soroban_sdk::Env::default();
@@ -1386,7 +1338,6 @@ mod by_attester_query_tests {
         assert!(envelope["data"].get("count").is_none());
     }
 
-
     #[test]
     fn formatter_handles_an_empty_result() {
         let env = soroban_sdk::Env::default();
@@ -1396,7 +1347,6 @@ mod by_attester_query_tests {
         assert_eq!(data["attester"], ATTESTER);
         assert_eq!(data["uids"], serde_json::json!([]));
     }
-
 
     fn spawn_mock_rpc(response_body: String) -> (String, std::thread::JoinHandle<String>) {
         let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
@@ -1428,7 +1378,6 @@ mod by_attester_query_tests {
         });
         (url, handle)
     }
-
 
     #[test]
     fn run_query_uses_the_sdk_simulation_decode_path() {
@@ -1465,7 +1414,6 @@ mod by_attester_query_tests {
     }
 }
 
-
 #[cfg(test)]
 mod schema_withdraw_fees_tests {
     use soroban_sdk::xdr::{
@@ -1477,7 +1425,6 @@ mod schema_withdraw_fees_tests {
     use std::net::{TcpListener, TcpStream};
 
     use crate::{OutputFormat, SchemaCommands};
-
 
     /// Answers the four calls one signed write pipeline makes —
     /// `getLedgerEntries`, `simulateTransaction`, `sendTransaction`,
@@ -1585,7 +1532,6 @@ mod schema_withdraw_fees_tests {
         url
     }
 
-
     fn read_request(stream: &TcpStream) -> serde_json::Value {
         let mut reader = BufReader::new(stream.try_clone().unwrap());
         let mut content_length = 0usize;
@@ -1604,7 +1550,6 @@ mod schema_withdraw_fees_tests {
         serde_json::from_slice(&body).unwrap()
     }
 
-
     fn write_response(mut stream: TcpStream, response: &serde_json::Value) {
         let body = response.to_string();
         let http = format!(
@@ -1615,7 +1560,6 @@ mod schema_withdraw_fees_tests {
         let _ = stream.write_all(http.as_bytes());
         let _ = stream.flush();
     }
-
 
     #[test]
     fn schema_withdraw_fees_runs_end_to_end_with_json_output() {
@@ -1654,7 +1598,6 @@ mod pagination_query_tests {
 
     const CONTRACT: &str = "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABSC4";
 
-
     fn account() -> String {
         stellar_strkey::ed25519::PublicKey([5u8; 32]).to_string()
     }
@@ -1681,7 +1624,6 @@ mod pagination_query_tests {
         Ok(page)
     }
 
-
     #[test]
     fn page_flags_are_optional_and_select_pagination_only_when_present() {
         assert_eq!(parse_page(&[]).unwrap().resolve(), Ok(None));
@@ -1701,7 +1643,6 @@ mod pagination_query_tests {
         );
     }
 
-
     #[test]
     fn page_limit_is_bounded_before_any_rpc_call() {
         for bad in ["0", "101"] {
@@ -1719,7 +1660,6 @@ mod pagination_query_tests {
         assert!(parse_page(&["--limit", "-1"]).is_err());
         assert!(parse_page(&["--cursor", "abc"]).is_err());
     }
-
 
     #[test]
     fn invalid_limit_fails_without_touching_the_network() {
@@ -1741,7 +1681,6 @@ mod pagination_query_tests {
         assert!(err.contains("--limit"), "{err}");
     }
 
-
     #[test]
     fn every_query_command_documents_the_page_flags() {
         let mut root = Cli::command();
@@ -1758,7 +1697,6 @@ mod pagination_query_tests {
         }
     }
 
-
     fn uids(env: &soroban_sdk::Env, seeds: &[u8]) -> soroban_sdk::Vec<UID> {
         let mut out = soroban_sdk::Vec::new(env);
         for seed in seeds {
@@ -1766,7 +1704,6 @@ mod pagination_query_tests {
         }
         out
     }
-
 
     #[test]
     fn format_page_reports_first_middle_and_final_pages() {
@@ -1792,7 +1729,6 @@ mod pagination_query_tests {
         assert!(data.get("attester").is_none());
     }
 
-
     #[test]
     fn format_page_handles_empty_and_past_the_end_requests() {
         let env = soroban_sdk::Env::default();
@@ -1810,7 +1746,6 @@ mod pagination_query_tests {
             "{human}"
         );
     }
-
 
     #[test]
     fn format_page_echoes_the_attester_like_the_unpaginated_command() {

@@ -9,7 +9,7 @@ edition = "2021"
 [dependencies]
 base64 = "0.22"
 clap = { version = "4.0", features = ["derive", "env"] }
-edgestald-dalek = "2.0.0"
+ed25519-dalek = "2.0.0"
 hex = "0.4"
 # TOML configuration file support for default RPC/network settings.
 toml = "0.8"

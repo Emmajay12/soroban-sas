@@ -2,7 +2,7 @@
 ///
 /// Wires `--network <name>` to a concrete RPC URL and network passphrase so
 /// the flag actually changes command behavior instead of being accepted and
-/// silently ignored. Precedence, applied uniformly by every subcommand via 
+/// silently ignored. Precedence, applied uniformly by every subcommand via
 /// [`crate::resolve_rpc_url`] / [`crate::resolve_network_passphrase`]:
 ///
 /// 1. An explicit subcommand flag (`--rpc-url`, `--network-passphrase`).
@@ -15,7 +15,6 @@
 /// Additionally, a TOML configuration file can provide defaults for the
 /// RPC URL and network passphrase, as well as a default network name.
 /// See [`crate::config`] for the loading logic.
-
 use serde::Deserialize;
 
 /// Resolved connection details for a named network.
@@ -121,12 +120,12 @@ mod tests {
 
     #[test]
     fn toml_config_deserializes_all_fields() {
-        let toml = r
+        let toml = r#"
             default_network = "testnet"
             rpc_url = "https://example.com/rpc"
             network_passphrase = "Test SDF Network ; September 2015"
         "#;
-        let config: TomlConfig = toml::Error = toml::from_str(toml).unwrap();
+        let config: TomlConfig = toml::from_str(toml).unwrap();
         assert_eq!(config.default_network, Some("testnet".to_string()));
         assert_eq!(config.rpc_url, Some("https://example.com/rpc".to_string()));
         assert_eq!(
@@ -137,9 +136,9 @@ mod tests {
 
     #[test]
     fn toml_config_allows_partial_fields() {
-        let toml = r
+        let toml = r#"
             default_network = "futurenet"
-        ";
+        "#;
         let config: TomlConfig = toml::from_str(toml).unwrap();
         assert_eq!(config.default_network, Some("futurenet".to_string()));
         assert!(config.rpc_url.is_none());
@@ -148,10 +147,10 @@ mod tests {
 
     #[test]
     fn toml_config_ignores_unknown_fields() {
-        let toml = r
+        let toml = r#"
             default_network = "local"
             unknown_field = "ignore me"
-        ";
+        "#;
         let config: TomlConfig = toml::from_str(toml).unwrap();
         assert_eq!(config.default_network, Some("local".to_string()));
     }
