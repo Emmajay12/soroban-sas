@@ -33,6 +33,7 @@ pub struct NetworkConfig {
 /// network_passphrase = "Test SDF Network ;; September 2015"
 /// ```
 #[derive(Debug, Clone, Default, Deserialize)]
+#[allow(dead_code)]
 pub struct TomlConfig {
     /// Optional default network name (e.g. "testnet", "futurenet", "mainnet", "local").
     pub default_network: Option<String>,
